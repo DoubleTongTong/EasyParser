@@ -2,7 +2,7 @@
 
 int main()
 {
-	std::string program = "42.12";
+	std::string program = "\"Hello world!\"";
 
 	TParser parser;
 	auto ast = parser.Parse(program);
