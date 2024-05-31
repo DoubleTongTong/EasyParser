@@ -47,7 +47,10 @@ std::unique_ptr<TASTNode> TParser::StringLiteral()
 {
 	TToken token = Eat(TToken::STRING);
 
-	return std::make_unique<TStringLiteral>(token.value);
+	/* 去掉开头和结尾的引号 */
+	std::string trimmed = token.value.substr(1, token.value.size() - 2);
+
+	return std::make_unique<TStringLiteral>(trimmed);
 }
 
 TToken TParser::Eat(TToken::Type tokenType)

@@ -1,4 +1,15 @@
 #include "TTokenizer.h"
+#include <assert.h>
+
+const std::vector<std::pair<std::regex, TToken::Type>> TTokenizer::m_spec =
+{
+	{ std::regex("^\\s+"), TToken::WHITESPACE },
+	{ std::regex("^//.*"), TToken::COMMENT },
+	{ std::regex("^/\\*[\\s\\S]*?\\*/"), TToken::COMMENT },
+	{ std::regex("^\\d+"), TToken::NUMBER },
+	{ std::regex("^\"[^\"]*\""), TToken::STRING },
+	{ std::regex("^'[^\"]*'"), TToken::STRING },
+};
 
 TToken::TToken(Type type, std::string value)
 	: type(type),
@@ -26,31 +37,37 @@ bool TTokenizer::HasMoreTokens() const
 
 TToken TTokenizer::GetNextToken()
 {
-	if (HasMoreTokens() == false)
-		return TToken(TToken::END, "");
-
-	// Number
-	if (std::isdigit(m_str[m_cursor]))
+	while (HasMoreTokens())
 	{
-		size_t start = m_cursor;
-		while (m_cursor < m_str.length() && std::isdigit(m_str[m_cursor]))
+		bool matched = false;
+
+		for (const auto& [regexp, tokenType] : m_spec)
 		{
-			m_cursor++;
+			std::sregex_iterator it(m_str.begin() + m_cursor, m_str.end(), regexp);
+			std::sregex_iterator end;
+
+			if (it != end)
+			{
+				std::smatch match = *it;
+
+				if (match.position() == 0)
+				{
+					m_cursor += match.length();
+					matched = true;
+
+					if (tokenType == TToken::WHITESPACE || tokenType == TToken::COMMENT)
+						break;
+
+					return TToken(tokenType, match.str());
+				}
+			}
 		}
 
-		return TToken(TToken::NUMBER, m_str.substr(start, m_cursor - start));
-	}
-
-	if (m_str[m_cursor] == '"')
-	{
-		size_t start = ++m_cursor;
-		while (m_cursor < m_str.length() && m_str[m_cursor] != '"')
+		if (matched == false)
 		{
-			m_cursor++;
+			fprintf(stderr, "Unexpected token: %c\n", m_str[m_cursor]);
+			assert(0 && "Unexpected token");
 		}
-
-		size_t end = m_cursor++;
-		return TToken(TToken::STRING, m_str.substr(start, end - start));
 	}
 
 	return TToken(TToken::END, "");

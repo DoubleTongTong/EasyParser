@@ -2,7 +2,12 @@
 
 int main()
 {
-	std::string program = "\"Hello world!\"";
+	std::string program = R"(
+		/**
+		 * This is a comment
+		 */
+		'Hello'
+	)";
 
 	TParser parser;
 	auto ast = parser.Parse(program);

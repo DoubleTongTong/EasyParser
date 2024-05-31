@@ -1,11 +1,13 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <regex>
 
 class TToken
 {
 public:
-	enum Type { NUMBER, STRING, END };
+	enum Type { NUMBER, STRING, WHITESPACE, COMMENT, END };
 
 	TToken(Type type, std::string value);
 
@@ -18,6 +20,8 @@ class TTokenizer
 {
 	std::string m_str;
 	size_t m_cursor;
+
+	static const std::vector<std::pair<std::regex, TToken::Type>> m_spec;
 
 public:
 	TTokenizer();
