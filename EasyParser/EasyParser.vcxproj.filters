@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{f04fef80-8f7e-48e5-83eb-71e4d689a89a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TASTNode.h">
@@ -23,6 +26,9 @@
     </ClInclude>
     <ClInclude Include="TTokenizer.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test_utils.h">
+      <Filter>tests</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +43,12 @@
     </ClCompile>
     <ClCompile Include="TTokenizer.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="literals_test.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="statement_list_test.cpp">
+      <Filter>tests</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

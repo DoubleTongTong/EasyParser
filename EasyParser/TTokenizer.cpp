@@ -6,6 +6,9 @@ const std::vector<std::pair<std::regex, TToken::Type>> TTokenizer::m_spec =
 	{ std::regex("^\\s+"), TToken::WHITESPACE },
 	{ std::regex("^//.*"), TToken::COMMENT },
 	{ std::regex("^/\\*[\\s\\S]*?\\*/"), TToken::COMMENT },
+
+	{ std::regex("^;"), TToken::SEMICOLON},
+
 	{ std::regex("^\\d+"), TToken::NUMBER },
 	{ std::regex("^\"[^\"]*\""), TToken::STRING },
 	{ std::regex("^'[^\"]*'"), TToken::STRING },

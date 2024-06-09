@@ -142,11 +142,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="TASTNode.h" />
+    <ClInclude Include="test_utils.h" />
     <ClInclude Include="TTokenizer.h" />
     <ClInclude Include="TParser.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="literals_test.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="statement_list_test.cpp" />
     <ClCompile Include="TASTNode.cpp" />
     <ClCompile Include="TTokenizer.cpp" />
     <ClCompile Include="TParser.cpp" />

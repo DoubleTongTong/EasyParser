@@ -20,7 +20,36 @@ std::unique_ptr<TASTNode> TParser::Parse(const std::string& str)
 
 std::unique_ptr<TASTNode> TParser::Program()
 {
-	return std::make_unique<TProgram>(Literal());
+	return std::make_unique<TProgram>(StatementList());
+}
+
+std::unique_ptr<TASTNode> TParser::StatementList()
+{
+	auto stmts = std::make_unique<TStatementList>();
+
+	while (m_lookahead.type != TToken::END)
+	{
+		stmts->AddStatement(Statement());
+	}
+
+	return stmts;
+}
+
+std::unique_ptr<TASTNode> TParser::Statement()
+{
+	return ExpressionStatement();
+}
+
+std::unique_ptr<TASTNode> TParser::ExpressionStatement()
+{
+	auto expr = Expression();
+	Eat(TToken::SEMICOLON);
+	return std::make_unique<TExpressionStatement>(std::move(expr));
+}
+
+std::unique_ptr<TASTNode> TParser::Expression()
+{
+	return Literal();
 }
 
 std::unique_ptr<TASTNode> TParser::Literal()

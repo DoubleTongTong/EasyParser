@@ -7,7 +7,7 @@
 class TToken
 {
 public:
-	enum Type { NUMBER, STRING, WHITESPACE, COMMENT, END };
+	enum Type { NUMBER, STRING, WHITESPACE, COMMENT, SEMICOLON, END };
 
 	TToken(Type type, std::string value);
 

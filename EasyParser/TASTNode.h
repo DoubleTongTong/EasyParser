@@ -4,12 +4,14 @@
 #include <variant>
 #include <string>
 #include <memory>
+#include <vector>
 
 class TASTNode
 {
 public:
 	virtual ~TASTNode();
 	virtual void Print(std::ostream& out, int level = 0) const = 0;
+	virtual bool Equals(const TASTNode* other) const = 0;
 };
 
 class TProgram : public TASTNode
@@ -19,6 +21,31 @@ class TProgram : public TASTNode
 public:
 	TProgram(std::unique_ptr<TASTNode> body);
 	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
+};
+
+class TStatementList : public TASTNode
+{
+	std::vector<std::unique_ptr<TASTNode>> m_statements;
+
+public:
+	TStatementList() = default;
+	explicit TStatementList(std::vector<std::unique_ptr<TASTNode>> statements);
+	void AddStatement(std::unique_ptr<TASTNode> stmt);
+
+	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
+};
+
+class TExpressionStatement : public TASTNode
+{
+	std::unique_ptr<TASTNode> m_expression;
+
+public:
+	TExpressionStatement(std::unique_ptr<TASTNode> expr);
+
+	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
 };
 
 class TNumericLiteral : public TASTNode
@@ -29,6 +56,7 @@ public:
 	TNumericLiteral(const std::variant<int, double>& val);
 
 	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
 };
 
 class TStringLiteral : public TASTNode
@@ -39,4 +67,5 @@ public:
 	TStringLiteral(const std::string& val);
 
 	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
 };
