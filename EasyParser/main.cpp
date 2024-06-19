@@ -6,6 +6,8 @@ std::vector<std::function<void(TTestFunc)>> tests =
 {
 	LiteralsTest,
 	StatementListTest,
+	BlockTest,
+	EmptyStatementTest,
 };
 
 void Test(const std::string& input, std::unique_ptr<TASTNode> expected)
@@ -29,12 +31,8 @@ int main()
 {
 #if 0
 	std::string program = R"(
-		/**
-		 * This is a comment
-		 */
-		'Hello';
-		// Number
-		42;
+
+			;
 	)";
 
 	TParser parser;

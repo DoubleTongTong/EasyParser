@@ -23,11 +23,11 @@ std::unique_ptr<TASTNode> TParser::Program()
 	return std::make_unique<TProgram>(StatementList());
 }
 
-std::unique_ptr<TASTNode> TParser::StatementList()
+std::unique_ptr<TASTNode> TParser::StatementList(TToken::Type endTokenType)
 {
 	auto stmts = std::make_unique<TStatementList>();
 
-	while (m_lookahead.type != TToken::END)
+	while (m_lookahead.type != TToken::END && m_lookahead.type != endTokenType)
 	{
 		stmts->AddStatement(Statement());
 	}
@@ -37,7 +37,31 @@ std::unique_ptr<TASTNode> TParser::StatementList()
 
 std::unique_ptr<TASTNode> TParser::Statement()
 {
-	return ExpressionStatement();
+	switch (m_lookahead.type)
+	{
+	case TToken::SEMICOLON:
+		return EmptyStatement();
+	case TToken::LBRACE:
+		return BlockStatement();
+	default:
+		return ExpressionStatement();
+	}
+}
+
+std::unique_ptr<TASTNode> TParser::EmptyStatement()
+{
+	Eat(TToken::SEMICOLON);
+
+	return std::make_unique<TEmptyStatement>();
+}
+
+std::unique_ptr<TASTNode> TParser::BlockStatement()
+{
+	Eat(TToken::LBRACE);
+	auto body = StatementList(TToken::RBRACE);
+	Eat(TToken::RBRACE);
+
+	return std::make_unique<TBlockStatement>(std::move(body));
 }
 
 std::unique_ptr<TASTNode> TParser::ExpressionStatement()

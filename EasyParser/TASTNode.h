@@ -37,6 +37,26 @@ public:
 	bool Equals(const TASTNode* other) const override;
 };
 
+class TBlockStatement : public TASTNode
+{
+	std::unique_ptr<TASTNode> m_body;
+
+public:
+	explicit TBlockStatement(std::unique_ptr<TASTNode> body);
+
+	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
+};
+
+class TEmptyStatement : public TASTNode
+{
+public:
+	TEmptyStatement() = default;
+
+	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
+};
+
 class TExpressionStatement : public TASTNode
 {
 	std::unique_ptr<TASTNode> m_expression;

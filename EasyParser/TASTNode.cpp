@@ -87,6 +87,51 @@ bool TStatementList::Equals(const TASTNode* other) const
     return true;
 }
 
+TBlockStatement::TBlockStatement(std::unique_ptr<TASTNode> body)
+    : m_body(std::move(body))
+{
+}
+
+void TBlockStatement::Print(std::ostream& out, int level) const
+{
+    std::string ind = TIndent(level);
+    std::string indInner = TIndent(level + 1);
+
+    out << ind << "{\n";
+    out << indInner << "\"type\": \"BlockStatement\",\n";
+    out << indInner << "\"body\":\n";
+    m_body->Print(out, level + 1);
+    out << ind << "}";
+}
+
+bool TBlockStatement::Equals(const TASTNode* other) const
+{
+    const TBlockStatement* blockStatement = dynamic_cast<const TBlockStatement*>(other);
+
+    if (blockStatement == NULL)
+        return false;
+
+    if (m_body.get() == NULL || blockStatement->m_body.get() == NULL)
+        return m_body.get() == blockStatement->m_body.get();
+
+    return m_body->Equals(blockStatement->m_body.get());
+}
+
+void TEmptyStatement::Print(std::ostream& out, int level) const
+{
+    std::string ind = TIndent(level);
+    std::string indInner = TIndent(level + 1);
+
+    out << ind << "{\n";
+    out << indInner << "\"type\": \"EmptyStatement\"\n";
+    out << ind << "}";
+}
+
+bool TEmptyStatement::Equals(const TASTNode* other) const
+{
+    return dynamic_cast<const TEmptyStatement*>(other) != NULL;
+}
+
 TExpressionStatement::TExpressionStatement(std::unique_ptr<TASTNode> expr)
     : m_expression(std::move(expr))
 {

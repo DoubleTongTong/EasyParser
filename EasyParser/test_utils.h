@@ -8,3 +8,5 @@ using TTestFunc = std::function<void(const std::string&, std::unique_ptr<TASTNod
 
 void LiteralsTest(TTestFunc testFunc);
 void StatementListTest(TTestFunc testFunc);
+void BlockTest(TTestFunc testFunc);
+void EmptyStatementTest(TTestFunc testFunc);

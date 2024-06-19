@@ -50,5 +50,11 @@
     <ClCompile Include="statement_list_test.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="block-test.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
+    <ClCompile Include="empty-statement-test.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
