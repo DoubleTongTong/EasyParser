@@ -22,9 +22,18 @@ private:
 	std::unique_ptr<TASTNode> BlockStatement();
 	std::unique_ptr<TASTNode> ExpressionStatement();
 	std::unique_ptr<TASTNode> Expression();
+	std::unique_ptr<TASTNode> AdditiveExpression();
+	std::unique_ptr<TASTNode> MultiplicativeExpression();
+	std::unique_ptr<TASTNode> PrimaryExpression();
+	std::unique_ptr<TASTNode> ParenthesizedExpression();
 	std::unique_ptr<TASTNode> Literal();
 	std::unique_ptr<TASTNode> NumericLiteral();
 	std::unique_ptr<TASTNode> StringLiteral();
 
 	TToken Eat(TToken::Type tokenType);
+
+	std::unique_ptr<TASTNode> HelperBinaryExpression(
+		std::unique_ptr<TASTNode> (TParser::*builder)(),
+		TToken::Type operatorToken
+	);
 };

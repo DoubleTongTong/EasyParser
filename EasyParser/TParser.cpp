@@ -73,7 +73,33 @@ std::unique_ptr<TASTNode> TParser::ExpressionStatement()
 
 std::unique_ptr<TASTNode> TParser::Expression()
 {
+	return AdditiveExpression();
+}
+
+std::unique_ptr<TASTNode> TParser::AdditiveExpression()
+{
+	return HelperBinaryExpression(&TParser::MultiplicativeExpression, TToken::ADD_OP);
+}
+
+std::unique_ptr<TASTNode> TParser::MultiplicativeExpression()
+{
+	return HelperBinaryExpression(&TParser::PrimaryExpression, TToken::MUL_OP);
+}
+
+std::unique_ptr<TASTNode> TParser::PrimaryExpression()
+{
+	if (m_lookahead.type == TToken::LPAREN)
+		return ParenthesizedExpression();
+
 	return Literal();
+}
+
+std::unique_ptr<TASTNode> TParser::ParenthesizedExpression()
+{
+	Eat(TToken::LPAREN);
+	auto expr = Expression();
+	Eat(TToken::RPAREN);
+	return expr;
 }
 
 std::unique_ptr<TASTNode> TParser::Literal()
@@ -114,4 +140,22 @@ TToken TParser::Eat(TToken::Type tokenType)
 	TToken token = m_lookahead;
 	m_lookahead = m_tokenizer.GetNextToken();
 	return token;
+}
+
+
+std::unique_ptr<TASTNode> TParser::HelperBinaryExpression(
+	std::unique_ptr<TASTNode>(TParser::* builder)(),
+	TToken::Type operatorToken)
+{
+	auto left = (this->*builder)();
+
+	while (m_lookahead.type == operatorToken)
+	{
+		std::string op = Eat(operatorToken).value;
+		auto right = (this->*builder)();
+
+		left = std::make_unique<TBinaryExpression>(op, std::move(left), std::move(right));
+	}
+
+	return left;
 }

@@ -151,6 +151,7 @@
     <ClCompile Include="empty-statement-test.cpp" />
     <ClCompile Include="literals_test.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math-test.cpp" />
     <ClCompile Include="statement_list_test.cpp" />
     <ClCompile Include="TASTNode.cpp" />
     <ClCompile Include="TTokenizer.cpp" />

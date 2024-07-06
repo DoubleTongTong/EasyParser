@@ -68,6 +68,21 @@ public:
 	bool Equals(const TASTNode* other) const override;
 };
 
+class TBinaryExpression : public TASTNode
+{
+	std::string m_op;
+	std::unique_ptr<TASTNode> m_left;
+	std::unique_ptr<TASTNode> m_right;
+
+public:
+	TBinaryExpression(const std::string& op,
+		              std::unique_ptr<TASTNode> left,
+					  std::unique_ptr<TASTNode> right);
+
+	void Print(std::ostream& out, int level) const override;
+	bool Equals(const TASTNode* other) const override;
+};
+
 class TNumericLiteral : public TASTNode
 {
 	std::variant<int, double> m_value;

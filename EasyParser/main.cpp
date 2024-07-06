@@ -8,6 +8,7 @@ std::vector<std::function<void(TTestFunc)>> tests =
 	StatementListTest,
 	BlockTest,
 	EmptyStatementTest,
+	MathTest,
 };
 
 void Test(const std::string& input, std::unique_ptr<TASTNode> expected)
@@ -31,8 +32,7 @@ int main()
 {
 #if 0
 	std::string program = R"(
-
-			;
+		(2 + 2) * 2;
 	)";
 
 	TParser parser;

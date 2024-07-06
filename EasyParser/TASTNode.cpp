@@ -145,7 +145,7 @@ void TExpressionStatement::Print(std::ostream& out, int level) const
     out << ind << "{\n";
     out << indInner << "\"type\": \"ExpressionStatement\",\n";
     out << indInner << "\"expression\":\n";
-    m_expression->Print(out, level + 1);
+    m_expression->Print(out, level + 1); out << "\n";
     out << ind << "}";
 }
 
@@ -162,6 +162,50 @@ bool TExpressionStatement::Equals(const TASTNode* other) const
     return m_expression->Equals(expressionStatement->m_expression.get());
 }
 
+TBinaryExpression::TBinaryExpression(const std::string& op,
+    std::unique_ptr<TASTNode> left,
+    std::unique_ptr<TASTNode> right)
+    : m_op(op), m_left(std::move(left)), m_right(std::move(right))
+{
+}
+
+void TBinaryExpression::Print(std::ostream& out, int level) const
+{
+    std::string ind = TIndent(level);
+    std::string indInner = TIndent(level + 1);
+
+    out << ind << "{\n";
+    out << indInner << "\"type\": \"BinaryExpression\",\n";
+    out << indInner << "\"operator\": \"" << m_op << "\",\n";
+    out << indInner << "\"left\":\n";
+    m_left->Print(out, level + 1); out << ",\n";
+    out << indInner << "\"right\":\n";
+    m_right->Print(out, level + 1); out << "\n";
+    out << ind << "}";
+}
+
+bool TBinaryExpression::Equals(const TASTNode* other) const
+{
+    const TBinaryExpression* binaryExpression = dynamic_cast<const TBinaryExpression*>(other);
+
+    if (binaryExpression == NULL)
+        return false;
+
+    if (m_op != binaryExpression->m_op)
+        return false;
+
+    auto areEqual = [](const std::unique_ptr<TASTNode>& lhs, const std::unique_ptr<TASTNode>& rhs)
+    {
+            if (lhs.get() == NULL && rhs.get() == NULL) return true;
+            if (lhs.get() == NULL || rhs.get() == NULL) return false;
+            return lhs->Equals(rhs.get());
+    };
+
+    return areEqual(m_left, binaryExpression->m_left) &&
+           areEqual(m_right, binaryExpression->m_right);
+}
+
+
 TNumericLiteral::TNumericLiteral(const std::variant<int, double>& val)
 	: m_value(val)
 {
@@ -176,7 +220,7 @@ void TNumericLiteral::Print(std::ostream& out, int level) const
         out << ind << "{\n";
         out << indInner << "\"type\": \"NumericLiteral\",\n";
         out << indInner << "\"value\": " << arg << "\n";
-        out << ind << "}\n";
+        out << ind << "}";
 		}, m_value);
 }
 

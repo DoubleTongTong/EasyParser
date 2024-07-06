@@ -10,3 +10,4 @@ void LiteralsTest(TTestFunc testFunc);
 void StatementListTest(TTestFunc testFunc);
 void BlockTest(TTestFunc testFunc);
 void EmptyStatementTest(TTestFunc testFunc);
+void MathTest(TTestFunc testFunc);

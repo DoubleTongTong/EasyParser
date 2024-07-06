@@ -56,5 +56,8 @@
     <ClCompile Include="empty-statement-test.cpp">
       <Filter>tests</Filter>
     </ClCompile>
+    <ClCompile Include="math-test.cpp">
+      <Filter>tests</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
